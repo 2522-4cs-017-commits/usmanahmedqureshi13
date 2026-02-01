@@ -16,7 +16,7 @@ const Contact = () => {
 
     try {
       // Localhost ka direct path diya hai taake koi confusion na ho
-      const res = await fetch("/api/send-email", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/send-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
