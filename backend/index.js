@@ -6,31 +6,26 @@ import nodemailer from "nodemailer";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
+// CORS fix: Isay ijazat deni hogi ke Vercel frontend se data le sake
 app.use(cors());
-app.use(express.json()); // Ye body parsing ke liye lazmi hai
+app.use(express.json());
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // Aapka 16-digit App Password
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-// Test route check karne ke liye ke server chal raha hai
 app.get("/", (req, res) => {
   res.send("Backend is up and running! ✅");
 });
 
-// Main Email Route
 app.post("/send-email", async (req, res) => {
-  console.log("Postman Data:", req.body); // Ye terminal mein check karein
-
   const { name, email, message } = req.body;
 
-  // Agar koi field missing hogi toh hi 400 error aayega
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, message: "Please fill all fields" });
   }
@@ -51,4 +46,10 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// VERCEL FIX: Local par 5000 use hoga, Vercel par export use hoga
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default app; // Ye line Vercel ke liye lazmi hai

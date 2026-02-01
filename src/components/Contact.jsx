@@ -15,8 +15,8 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      // Localhost ka direct path diya hai taake koi confusion na ho
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/send-email`, {
+      // Relative path use kiya hai jo vercel.json ke rewrites se connect hoga
+      const res = await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -29,14 +29,14 @@ const Contact = () => {
           title: "Message Sent ✅",
           description: "I will contact you soon!",
         });
-        setFormData({ name: "", email: "", message: "" }); // Form khali karne ke liye
+        setFormData({ name: "", email: "", message: "" });
       } else {
         throw new Error(data.message || "Failed to send");
       }
     } catch (error) {
       toast({
         title: "Error ❌",
-        description: "Server is not responding. Make sure backend is running!",
+        description: "Server is not responding. Backend connection issue!",
         variant: "destructive",
       });
     }
