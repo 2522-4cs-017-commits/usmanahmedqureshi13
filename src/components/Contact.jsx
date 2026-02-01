@@ -16,7 +16,7 @@ const Contact = () => {
 
     try {
       // Relative path use kiya hai jo vercel.json ke rewrites se connect hoga
-      const res = await fetch("/api/send-email", {
+      const res = await fetch("https://usmanahmedqureshi13-production.up.railway.app/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
